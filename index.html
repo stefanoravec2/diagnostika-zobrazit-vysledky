@@ -192,7 +192,7 @@ src="https://www.facebook.com/tr?id=1077151229776455&ev=PageView&noscript=1"
     <div class="scores-label">Skóre v pilieroch</div>
     <div id="scores-rows"></div>
   </div>
-  <div class="action-box" id="action-box">
+  <div class="action-box">
     <div class="action-label">Čo musíš okamžite zmeniť</div>
     <div id="action-items"></div>
   </div>
@@ -205,32 +205,6 @@ src="https://www.facebook.com/tr?id=1077151229776455&ev=PageView&noscript=1"
 </div>
 
 <script>
-const questions = [
-  { cat: 'Technika behu', text: 'Ako by si opísal <span>došľap</span> pri bežnom tréningu?', pillar: 0, answers: ['Päta výrazne pred telom', 'Stredná časť chodidla, noha pod bokmi', 'Predná časť chodidla, vysoká kadencia', 'Neviem – nikto mi to neanalyzoval'], scores: [0,2,3,1] },
-  { cat: 'Technika behu', text: 'Ako vnímaš <span>polohu trupu</span> pri behu?', pillar: 0, answers: ['Predkláňam sa výrazne dopredu', 'Mierne predklonený, prirodzene', 'Vzpriamený, takmer bez predklonu', 'Neviem posúdiť svoju techniku'], scores: [1,3,1,0] },
-  { cat: 'Technika behu', text: 'Analyzoval ti odborník <span>techniku</span> behu?', pillar: 0, answers: ['Nikdy – behám bez spätnej väzby', 'Raz, bez videa alebo konkrétnych odporúčaní', 'Áno, videoanalýza s konkrétnymi odporúčaniami', 'Pravidelne, mám techniku pod kontrolou'], scores: [0,1,2,3] },
-  { cat: 'Tréning', text: 'Ako nastavuješ <span>intenzitu</span> tréningu?', pillar: 1, answers: ['Podľa pocitu, bez merania', 'Podľa tempa na km', 'Podľa srdcovej frekvencie a zón', 'Mám periodizovaný plán s cieľmi'], scores: [0,1,2,3] },
-  { cat: 'Tréning', text: 'Koľko percent tvojich behov je <span>naozaj ľahkých?</span>', pillar: 1, answers: ['Menej ako 20% – väčšinou idem naplno', 'Okolo 50% – striedam', 'Viac ako 70% – väčšina je ľahká', 'Nerozlišujem intenzity'], scores: [1,2,3,0] },
-  { cat: 'Tréning', text: 'Máš <span>dlhodobý plán</span> s periodizáciou?', pillar: 1, answers: ['Nie, behám podľa nálady', 'Mám hrubý plán, ale nedodržiavam ho', 'Áno, mám štruktúrovaný plán', 'Pracujem s trénerom'], scores: [0,1,2,3] },
-  { cat: 'Pripravenosť tela', text: 'Ako často zaraďuješ <span>silový tréning</span> bežca?', pillar: 2, answers: ['Nikdy', 'Príležitostne, bez systému', '1× týždenne, cielene', '2× a viac, s programom'], scores: [0,1,2,3] },
-  { cat: 'Pripravenosť tela', text: 'Ako reaguje telo <span>po náročnom behu?</span>', pillar: 2, answers: ['Dlhodobá únava, bolesti kĺbov', 'Svalová únava, ale bez bolestí', 'Rýchla regenerácia do 24 hodín', 'Výborne, regenerujem bez problémov'], scores: [0,1,2,3] },
-  { cat: 'Pripravenosť tela', text: 'Ako často ťa obmedzí <span>bolesť alebo zranenie?</span>', pillar: 2, answers: ['Často – niekoľkokrát za mesiac', 'Občas – niekoľkokrát za rok', 'Zriedka – raz za rok alebo menej', 'Takmer nikdy'], scores: [0,1,2,3] },
-  { cat: 'Porozumenie behu', text: 'Čo je hlavná príčina <span>tvojej stagnácie?</span>', pillar: 3, answers: ['Technika – neviem správne behať', 'Tréning – nemám systém', 'Telo – chýba mi sila a stabilita', 'Neviem – preto som tu'], scores: [1,1,1,0] },
-];
-
-const pillarNames = ['Technika behu', 'Tréning', 'Pripravenosť tela', 'Porozumenie behu'];
-const pillarDescs = [
-  'Hodnotí došľap, postoj tela, kadenciu a celkovú ekonomiku pohybu.',
-  'Hodnotí nastavenie intenzity, rozloženie záťaže a existenciu tréningového plánu.',
-  'Hodnotí silový tréning, regeneráciu a frekvenciu zranení.',
-  'Hodnotí pochopenie tréningových princípov a príčin stagnácie.'
-];
-const actions = [
-  ['Nechaj si analyzovať techniku videorozbором u certifikovaného trénera', 'Zameraj sa na správny došľap – noha pod bokmi, nie pred telom', 'Zapracuj na kadencii – cieľ 170–180 krokov/min'],
-  ['Zaveď tréningové zóny podľa srdcovej frekvencie', 'Začni s periodizáciou – rozdeľ tréning na ľahké, stredné a ťažké dni', '80% tvojich behov by malo byť skutočne ľahkých'],
-  ['Zaraď 2× týždenne silový tréning zameraný na bežca', 'Pracuj na mobilite bedrového kĺbu a hlezna', 'Sleduj signály tela – bolesť je varovanie, nie výzva'],
-  ['Študuj princíp polarizovaného tréningu', 'Pochop rozdiel medzi adaptáciou a preťažením', 'Nastav konkrétne ciele na 3 a 6 mesiacov']
-];
 const profiles = [
   { name: 'Hľadajúci smer', highlight: 'smer', desc: 'Stojíš na začiatku svojej bežeckej cesty bez pevného systému. Správne základy – technika, plán a sila – môžu zmeniť všetko rýchlejšie, ako si myslíš.', goodLabel: 'Potenciál', goodVal: 'Vysoký', warnLabel: 'Hlavná rezerva', warnVal: 'Systém a plán', neutralLabel: 'Priorita', neutralVal: 'Technika' },
   { name: 'Poctivý makač', highlight: 'makač', desc: 'Trénuješ s odhodlaním, ale efektivita je nízka. Behávaz veľa, no bez správneho rozloženia záťaže telo nestíha regenerovať. Problém nie je v množstve – je v systéme.', goodLabel: 'Silná stránka', goodVal: 'Disciplína', warnLabel: 'Hlavná rezerva', warnVal: 'Intenzita behov', neutralLabel: 'Priorita', neutralVal: 'Tréningový plán' },
@@ -255,8 +229,6 @@ function showResult() {
   const p0 = parseInt(getParam('p0')), p1 = parseInt(getParam('p1'));
   const p2 = parseInt(getParam('p2')), p3 = parseInt(getParam('p3'));
   const hasParams = !isNaN(p0) && !isNaN(p1) && !isNaN(p2) && !isNaN(p3);
-  const pcts = hasParams ? [p0, p1, p2, p3] : [0, 0, 0, 0];
-  const total = parseInt(getParam('total')) || 0;
 
   if (!hasParams) {
     document.getElementById('result-profile').innerHTML = 'Výsledky nenájdené';
@@ -267,6 +239,8 @@ function showResult() {
     return;
   }
 
+  const pcts = [p0, p1, p2, p3];
+  const total = parseInt(getParam('total')) || 0;
   let pIdx = total < 20 ? 0 : total < 38 ? 1 : total < 55 ? 2 : total < 70 ? 3 : 4;
   const p = profiles[pIdx];
   const nameParts = p.name.split(p.highlight);
