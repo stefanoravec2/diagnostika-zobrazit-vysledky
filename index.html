@@ -221,30 +221,30 @@ const actions = [
   ['Študuj princíp polarizovaného tréningu', 'Pochop rozdiel medzi adaptáciou a preťažením', 'Nastav konkrétne ciele na 3 a 6 mesiacov']
 ];
 
-function getParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
-
 function showResult() {
-  const p0 = parseInt(getParam('p0')), p1 = parseInt(getParam('p1'));
-  const p2 = parseInt(getParam('p2')), p3 = parseInt(getParam('p3'));
-  const hasParams = !isNaN(p0) && !isNaN(p1) && !isNaN(p2) && !isNaN(p3);
+  // Nacitaj zo sessionStorage
+  const raw = sessionStorage.getItem('tpd_results');
 
-  if (!hasParams) {
+  if (!raw) {
     document.getElementById('result-profile').innerHTML = 'Výsledky nenájdené';
     document.getElementById('result-desc').textContent = 'Prosím vyplň diagnostiku na hlavnej stránke.';
     document.getElementById('result-summary').innerHTML = '';
     document.getElementById('scores-rows').innerHTML = '';
-    document.getElementById('action-items').innerHTML = '<div class="action-item"><span class="action-arrow">→</span><a href="https://stefanoravec2.github.io/diagnostika/" style="color:var(--teal)">Spustiť diagnostiku</a></div>';
+    document.getElementById('action-items').innerHTML =
+      '<div class="action-item"><span class="action-arrow">→</span>' +
+      '<a href="https://stefanoravec2.github.io/diagnostika/" style="color:var(--teal)">Spustiť diagnostiku</a></div>';
     return;
   }
 
-  const pcts = [p0, p1, p2, p3];
-  const total = parseInt(getParam('total')) || 0;
+  const data = JSON.parse(raw);
+  const pcts = data.pcts;
+  const total = data.total;
+
   let pIdx = total < 20 ? 0 : total < 38 ? 1 : total < 55 ? 2 : total < 70 ? 3 : 4;
   const p = profiles[pIdx];
   const nameParts = p.name.split(p.highlight);
-  document.getElementById('result-profile').innerHTML = nameParts[0] + '<span>' + p.highlight + '</span>' + (nameParts[1] || '');
+  document.getElementById('result-profile').innerHTML =
+    nameParts[0] + '<span>' + p.highlight + '</span>' + (nameParts[1] || '');
   document.getElementById('result-desc').textContent = p.desc;
   document.getElementById('result-summary').innerHTML = `
     <div class="summary-card good"><div class="sc-label">${p.goodLabel}</div><div class="sc-val">${p.goodVal}</div></div>
@@ -262,7 +262,9 @@ function showResult() {
       <div class="score-row-pct pct-${cls}">${pct}%</div>
     </div>`;
   }).join('');
-  setTimeout(() => { document.querySelectorAll('.score-row-fill').forEach(el => { el.style.width = el.dataset.w; }); }, 100);
+  setTimeout(() => {
+    document.querySelectorAll('.score-row-fill').forEach(el => { el.style.width = el.dataset.w; });
+  }, 100);
   document.getElementById('action-items').innerHTML = actions[weakest.i].map(a =>
     `<div class="action-item"><span class="action-arrow">→</span>${a}</div>`
   ).join('');
