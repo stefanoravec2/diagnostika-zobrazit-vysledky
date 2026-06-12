@@ -239,27 +239,38 @@ const profiles = [
   { name: 'Výkonnostný hobby bežec', highlight: 'hobby bežec', desc: 'Rozumieš tréningu výrazne lepšie ako väčšina. Tvojim ďalším krokom sú detaily – precízna technika, špecifická silová príprava a periodizácia.', goodLabel: 'Porozumenie', goodVal: 'Nadpriemerné', warnLabel: 'Rezerva', warnVal: 'Technické detaily', neutralLabel: 'Ďalší krok', neutralVal: 'Tréner / plán' },
 ];
 
-const pillarDescs = [
-  'Hodnotí došľap, postoj tela, kadenciu a celkovú ekonomiku pohybu.',
-  'Hodnotí nastavenie intenzity, rozloženie záťaže a existenciu tréningového plánu.',
-  'Hodnotí silový tréning, regeneráciu a frekvenciu zranení.',
-  'Hodnotí pochopenie tréningových princípov a príčin stagnácie.'
+const pillarNames = ['Technika behu', 'Tréning', 'Pripravenosť tela', 'Porozumenie behu'];
+const actions = [
+  ['Nechaj si analyzovať techniku videorozbором u certifikovaného trénera', 'Zameraj sa na správny došľap – noha pod bokmi, nie pred telom', 'Zapracuj na kadencii – cieľ 170–180 krokov/min'],
+  ['Zaveď tréningové zóny podľa srdcovej frekvencie', 'Začni s periodizáciou – rozdeľ tréning na ľahké, stredné a ťažké dni', '80% tvojich behov by malo byť skutočne ľahkých'],
+  ['Zaraď 2× týždenne silový tréning zameraný na bežca', 'Pracuj na mobilite bedrového kĺbu a hlezna', 'Sleduj signály tela – bolesť je varovanie, nie výzva'],
+  ['Študuj princíp polarizovaného tréningu', 'Pochop rozdiel medzi adaptáciou a preťažením', 'Nastav konkrétne ciele na 3 a 6 mesiacov']
 ];
 
 function getParam(name) {
-  const url = new URLSearchParams(window.location.search);
-  return url.get(name);
+  return new URLSearchParams(window.location.search).get(name);
 }
 
 function showResult() {
-  // Nacitaj parametre z URL
-  const pcts = [0,1,2,3].map(i => parseInt(getParam('p' + i)) || 0);
-  const total = parseInt(getParam('total')) || Math.round(pcts.reduce((a,b) => a+b, 0) / 4);
+  const p0 = parseInt(getParam('p0')), p1 = parseInt(getParam('p1'));
+  const p2 = parseInt(getParam('p2')), p3 = parseInt(getParam('p3'));
+  const hasParams = !isNaN(p0) && !isNaN(p1) && !isNaN(p2) && !isNaN(p3);
+  const pcts = hasParams ? [p0, p1, p2, p3] : [0, 0, 0, 0];
+  const total = parseInt(getParam('total')) || 0;
+
+  if (!hasParams) {
+    document.getElementById('result-profile').innerHTML = 'Výsledky nenájdené';
+    document.getElementById('result-desc').textContent = 'Prosím vyplň diagnostiku na hlavnej stránke.';
+    document.getElementById('result-summary').innerHTML = '';
+    document.getElementById('scores-rows').innerHTML = '';
+    document.getElementById('action-items').innerHTML = '<div class="action-item"><span class="action-arrow">→</span><a href="https://stefanoravec2.github.io/diagnostika/" style="color:var(--teal)">Spustiť diagnostiku</a></div>';
+    return;
+  }
 
   let pIdx = total < 20 ? 0 : total < 38 ? 1 : total < 55 ? 2 : total < 70 ? 3 : 4;
   const p = profiles[pIdx];
   const nameParts = p.name.split(p.highlight);
-  document.getElementById('result-profile').innerHTML = nameParts[0] + '<span>' + p.highlight + '</span>' + (nameParts[1]||'');
+  document.getElementById('result-profile').innerHTML = nameParts[0] + '<span>' + p.highlight + '</span>' + (nameParts[1] || '');
   document.getElementById('result-desc').textContent = p.desc;
   document.getElementById('result-summary').innerHTML = `
     <div class="summary-card good"><div class="sc-label">${p.goodLabel}</div><div class="sc-val">${p.goodVal}</div></div>
@@ -267,7 +278,7 @@ function showResult() {
     <div class="summary-card neutral"><div class="sc-label">${p.neutralLabel}</div><div class="sc-val">${p.neutralVal}</div></div>
     <div class="summary-card"><div class="sc-label">Celkové skóre</div><div class="sc-val">${total} / 100</div></div>
   `;
-  const sorted = pcts.map((p,i) => ({p,i})).sort((a,b) => a.p - b.p);
+  const sorted = pcts.map((v, i) => ({v, i})).sort((a, b) => a.v - b.v);
   const weakest = sorted[0];
   document.getElementById('scores-rows').innerHTML = pcts.map((pct, i) => {
     const cls = pct >= 65 ? 'high' : pct >= 40 ? 'mid' : 'low';
@@ -283,7 +294,6 @@ function showResult() {
   ).join('');
 }
 
-// Spusti pri nacitani stranky
 showResult();
 </script>
 </body>
