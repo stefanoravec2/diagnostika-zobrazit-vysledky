@@ -237,6 +237,10 @@ function showResult() {
   }
 
   const data = JSON.parse(raw);
+  if (typeof fbq !== 'undefined') {
+    if (data.emHash) fbq('init', '1077151229776455', { em: data.emHash });
+    fbq('track', 'CompleteRegistration');
+  }
   const pcts = data.pcts;
   const total = data.total;
 
