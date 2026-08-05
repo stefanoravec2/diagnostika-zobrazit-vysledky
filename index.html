@@ -205,24 +205,23 @@ src="https://www.facebook.com/tr?id=1077151229776455&ev=PageView&noscript=1"
 </div>
 
 <script>
-const profiles = [
-  { name: 'Hľadajúci smer', highlight: 'smer', desc: 'Stojíš na začiatku svojej bežeckej cesty bez pevného systému. Správne základy – technika, plán a sila – môžu zmeniť všetko rýchlejšie, ako si myslíš.', goodLabel: 'Potenciál', goodVal: 'Vysoký', warnLabel: 'Hlavná rezerva', warnVal: 'Systém a plán', neutralLabel: 'Priorita', neutralVal: 'Technika' },
-  { name: 'Poctivý makač', highlight: 'makač', desc: 'Trénuješ s odhodlaním, ale efektivita je nízka. Behávaz veľa, no bez správneho rozloženia záťaže telo nestíha regenerovať. Problém nie je v množstve – je v systéme.', goodLabel: 'Silná stránka', goodVal: 'Disciplína', warnLabel: 'Hlavná rezerva', warnVal: 'Intenzita behov', neutralLabel: 'Priorita', neutralVal: 'Tréningový plán' },
-  { name: 'Zaseknutý bežec', highlight: 'bežec', desc: 'Máš za sebou kilometre, ale výsledky stagnujú. Telo si zvyklo na záťaž a prestalo sa adaptovať. Rezervy sú v technike a v správnom nastavení tréningových podnetov.', goodLabel: 'Skúsenosť', goodVal: 'Vysoká', warnLabel: 'Stagnácia v', warnVal: 'Technika a plán', neutralLabel: 'Kľúčová zmena', neutralVal: 'Videoanalýza' },
-  { name: 'Nevyužitý potenciál', highlight: 'potenciál', desc: 'Máš dobré základy a disciplínu. Chýbajú ti presnejšie informácie o technike a špecifická príprava tela. Odtiaľ pochádzajú tvoje najväčšie rezervy.', goodLabel: 'Základ', goodVal: 'Solídny', warnLabel: 'Rezerva', warnVal: 'Detaily techniky', neutralLabel: 'Priorita', neutralVal: 'Sila a mobilita' },
-  { name: 'Výkonnostný hobby bežec', highlight: 'hobby bežec', desc: 'Rozumieš tréningu výrazne lepšie ako väčšina. Tvojim ďalším krokom sú detaily – precízna technika, špecifická silová príprava a periodizácia.', goodLabel: 'Porozumenie', goodVal: 'Nadpriemerné', warnLabel: 'Rezerva', warnVal: 'Technické detaily', neutralLabel: 'Ďalší krok', neutralVal: 'Tréner / plán' },
+const PILLAR_NAMES = ['Pulz a objem', 'Technika behu', 'Tréning', 'Pripravenosť tela', 'Porozumenie behu'];
+
+const profileByWeakest = [
+  { name: 'Nevyužitý potenciál pulzu', highlight: 'pulzu', desc: 'Tvoje tréningy pravdepodobne nerozvíjajú presne to, čo si myslíš. Bez sledovania pulzu a pásiem netušíš, či konkrétny tréning naozaj niečo posúva, alebo len opakuje podnet, na ktorý je telo už zvyknuté.' },
+  { name: 'Bežec bez spätnej väzby', highlight: 'spätnej väzby', desc: 'Tvoja technika má rezervu, ktorú si sám ťažko všimneš. Bez videa alebo odborného pohľadu sa drobné chyby opakujú krok za krokom, tréning za tréningom.' },
+  { name: 'Bežec bez systému', highlight: 'systému', desc: 'Trénuješ, ale spôsob, akým si nastavuješ intenzitu a objem, ťa pravdepodobne brzdí viac, než tušíš. Bez jasnej štruktúry sa dá udržať forma, ale ťažko sa dá systematicky zlepšovať.' },
+  { name: 'Bežec s rizikom zranenia', highlight: 'zranenia', desc: 'Tvoje telo pravdepodobne nedostáva podporu, akú potrebuje na to, aby uneslo záťaž, ktorú mu dávaš – to zvyšuje riziko, že ťa zastaví bolesť skôr než forma.' },
 ];
 
-const pillarNames = ['Technika behu', 'Tréning', 'Pripravenosť tela', 'Porozumenie behu'];
-const actions = [
-  ['Nechaj si analyzovať techniku videorozbором u certifikovaného trénera', 'Zameraj sa na správny došľap – noha pod bokmi, nie pred telom', 'Zapracuj na kadencii – cieľ 170–180 krokov/min'],
-  ['Zaveď tréningové zóny podľa srdcovej frekvencie', 'Začni s periodizáciou – rozdeľ tréning na ľahké, stredné a ťažké dni', '80% tvojich behov by malo byť skutočne ľahkých'],
-  ['Zaraď 2× týždenne silový tréning zameraný na bežca', 'Pracuj na mobilite bedrového kĺbu a hlezna', 'Sleduj signály tela – bolesť je varovanie, nie výzva'],
-  ['Študuj princíp polarizovaného tréningu', 'Pochop rozdiel medzi adaptáciou a preťažením', 'Nastav konkrétne ciele na 3 a 6 mesiacov']
+const pillarActions = [
+  ['Zaveď tréningové zóny podľa maximálneho pulzu', 'Drž pravidlo 80/20 – 80 % objemu skutočne naľahko', 'Zaraď pravidelne úsek nad ANP, nie len náhodne'],
+  ['Nechaj si analyzovať techniku videorozborom u trénera', 'Cieľ pri došľape: noha pod bokmi, nie pred telom', 'Zapracuj na kadencii – cieľ okolo 170–180 krokov/min'],
+  ['Nastav si periodizovaný plán namiesto tréningu podľa pocitu', 'Drž si aspoň 80 % behov skutočne ľahkých', 'Raz za pár týždňov sa pozri spätne, čo si trénoval, a uprav podnet'],
+  ['Zaraď 2× týždenne silový tréning zameraný na bežca', 'Sleduj signály tela – bolesť je varovanie, nie výzva na pokračovanie', 'Daj regenerácii toľko priestoru, koľko dávaš tréningu'],
 ];
 
 function showResult() {
-  // Nacitaj zo sessionStorage
   const raw = sessionStorage.getItem('tpd_results');
 
   if (!raw) {
@@ -243,25 +242,24 @@ function showResult() {
   }
   const pcts = data.pcts;
   const total = data.total;
+  const weakest = (typeof data.weakest === 'number') ? data.weakest : 0;
+  const strongestIdx = [0,1,2,3].reduce((best, i) => pcts[i] > pcts[best] ? i : best, 0);
+  const p = profileByWeakest[weakest];
 
-  let pIdx = total < 20 ? 0 : total < 38 ? 1 : total < 55 ? 2 : total < 70 ? 3 : 4;
-  const p = profiles[pIdx];
   const nameParts = p.name.split(p.highlight);
   document.getElementById('result-profile').innerHTML =
     nameParts[0] + '<span>' + p.highlight + '</span>' + (nameParts[1] || '');
   document.getElementById('result-desc').textContent = p.desc;
   document.getElementById('result-summary').innerHTML = `
-    <div class="summary-card good"><div class="sc-label">${p.goodLabel}</div><div class="sc-val">${p.goodVal}</div></div>
-    <div class="summary-card warn"><div class="sc-label">${p.warnLabel}</div><div class="sc-val">${p.warnVal}</div></div>
-    <div class="summary-card neutral"><div class="sc-label">${p.neutralLabel}</div><div class="sc-val">${p.neutralVal}</div></div>
     <div class="summary-card"><div class="sc-label">Celkové skóre</div><div class="sc-val">${total} / 100</div></div>
+    <div class="summary-card warn"><div class="sc-label">Hlavné obmedzenie</div><div class="sc-val">${PILLAR_NAMES[weakest]}</div></div>
+    <div class="summary-card good"><div class="sc-label">Najsilnejšia oblasť</div><div class="sc-val">${PILLAR_NAMES[strongestIdx]}</div></div>
+    <div class="summary-card neutral"><div class="sc-label">Porozumenie behu</div><div class="sc-val">${pcts[4]}/100</div></div>
   `;
-  const sorted = pcts.map((v, i) => ({v, i})).sort((a, b) => a.v - b.v);
-  const weakest = sorted[0];
   document.getElementById('scores-rows').innerHTML = pcts.map((pct, i) => {
     const cls = pct >= 65 ? 'high' : pct >= 40 ? 'mid' : 'low';
     return `<div class="score-row">
-      <div class="score-row-name">${pillarNames[i]}</div>
+      <div class="score-row-name">${PILLAR_NAMES[i]}</div>
       <div class="score-row-bg"><div class="score-row-fill fill-${cls}" style="width:0%" data-w="${pct}%"></div></div>
       <div class="score-row-pct pct-${cls}">${pct}%</div>
     </div>`;
@@ -269,7 +267,7 @@ function showResult() {
   setTimeout(() => {
     document.querySelectorAll('.score-row-fill').forEach(el => { el.style.width = el.dataset.w; });
   }, 100);
-  document.getElementById('action-items').innerHTML = actions[weakest.i].map(a =>
+  document.getElementById('action-items').innerHTML = pillarActions[weakest].map(a =>
     `<div class="action-item"><span class="action-arrow">→</span>${a}</div>`
   ).join('');
 }
