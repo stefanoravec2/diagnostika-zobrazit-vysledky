@@ -105,7 +105,7 @@ function drawRadar(svg, pcts){
 }
 
 var userName='', userEmail='', userEmailHash='';
-var weakestIdx = 0, pctsGlobal = [0,0,0,0,0];
+var weakestIdx = 0, pctsGlobal = [0,0,0,0,0], totalGlobal = 0;
 
 function renderPillarsRow(){
   return ORDER.map(function(k){
@@ -154,7 +154,7 @@ function renderNotFound(){
 
 function renderResult(data){
   var pcts = data.pcts, total = data.total, weakest = (typeof data.weakest==='number')?data.weakest:0;
-  weakestIdx = weakest; pctsGlobal = pcts;
+  weakestIdx = weakest; pctsGlobal = pcts; totalGlobal = total;
   var profileName = PROFILE_NAME[weakest];
   var weakestKey = ORDER[weakest];
   var wc = PILLAR_LONG.WEAKEST[weakestKey];
@@ -263,7 +263,7 @@ async function submitEmail(){
   }
   var weakestLabel = PILLARS[ORDER[weakestIdx]].label;
   var pcts = pctsGlobal;
-  var total = Math.round(pcts.reduce(function(a,b){return a+b;},0)/pcts.length);
+  var total = totalGlobal;
   var blocks = buildEmailHtmlBlocks(pcts, weakestIdx);
   var radarUrl = 'https://ecomail-proxy.vercel.app/api/radar?p=' + pcts.join(',');
   var fields = {
