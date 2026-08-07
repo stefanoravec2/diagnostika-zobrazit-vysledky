@@ -154,11 +154,12 @@ function renderNotFound(){
 
 function renderResult(data){
   var pcts = data.pcts, total = data.total, weakest = (typeof data.weakest==='number')?data.weakest:0;
-  weakestIdx = weakest; pctsGlobal = pcts; totalGlobal = total; expertGlobal = ex;
+  weakestIdx = weakest; pctsGlobal = pcts; totalGlobal = total;
   var profileName = PROFILE_NAME[weakest];
   var weakestKey = ORDER[weakest];
   var wc = PILLAR_LONG.WEAKEST[weakestKey];
   var ex = EXPERTS[PILLAR_EXPERT[weakestKey]];
+  expertGlobal = ex;
   var weakestLabel = PILLARS[weakestKey].label;
 
   document.getElementById('wrap').innerHTML =
