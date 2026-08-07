@@ -265,7 +265,7 @@ async function submitEmail(){
   var pcts = pctsGlobal;
   var total = Math.round(pcts.reduce(function(a,b){return a+b;},0)/pcts.length);
   var blocks = buildEmailHtmlBlocks(pcts, weakestIdx);
-  var radarUrl = 'https://ecomail-proxy.vercel.app/api/radar.png?p=' + pcts.join(',');
+  var radarUrl = 'https://ecomail-proxy.vercel.app/api/radar?p=' + pcts.join(',');
   var fields = {
     total: total,
     profileName: PROFILE_NAME[weakestIdx],
